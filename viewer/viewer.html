@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PreventNet Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%235b4ee6%27/%3E%3Cpath d=%27M16 7l2.2 6.3L24.5 15l-6.3 2.2L16 23.5l-2.2-6.3L7.5 15l6.3-1.7z%27 fill=%27white%27/%3E%3C/svg%3E">
+<style>
+  :root {
+    --canvas: #f2f2f6; --card: #fff; --line: #ebebf1; --line-2: #dfdfe8; --ink: #15151c; --ink-2: #5d5d6c; --ink-3: #9898a7;
+    --accent: #5b4ee6; --accent-2: #7d72f6; --accent-soft: #efedfe;
+    --ok: #178f60; --ok-soft: #e4f5ed; --warn: #b87404; --warn-soft: #fdf1dc; --bad: #d64541; --bad-soft: #fcebea;
+    --gp: #5b4ee6; --pharmacy: #e8772e; --lab: #139a8f; --fed: #9b5de5;
+    --shadow: 0 1px 2px rgba(20,20,40,.04), 0 4px 16px rgba(20,20,40,.04);
+    --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--canvas); color: var(--ink); font: 14px/1.55 var(--font); -webkit-font-smoothing: antialiased; padding-block: 24px 48px; padding-inline: max(16px, 4vw); }
+  body.embed { background: transparent; padding: 0; }
+  h1, h2, h3, p { margin: 0; } h1 { font-size: 20px; font-weight: 600; } h2 { font-size: 16px; font-weight: 600; } h3 { font-size: 13px; font-weight: 600; }
+  .wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 20px; }
+  body.embed .wrap { max-width: none; }
+  .muted { color: var(--ink-2); } .faint { color: var(--ink-3); } .small { font-size: 12.5px; }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  svg.i { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); min-width: 0; }
+  .head { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .who { display: flex; gap: 12px; align-items: center; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; color: var(--accent); background: var(--accent-soft); flex: none; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 500; white-space: nowrap; background: #f1f1f5; color: var(--ink-2); }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .chip.ok { background: var(--ok-soft); color: var(--ok); } .chip.warn { background: var(--warn-soft); color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); color: var(--bad); } .chip.info { background: var(--accent-soft); color: var(--accent); }
+  .chip.big { padding: 6px 14px; font-size: 13px; }
+  .depts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .dept { display: flex; gap: 10px; align-items: center; }
+  .tile { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: #fff; flex: none; }
+  .tile.gp { background: var(--gp); } .tile.pharmacy { background: var(--pharmacy); } .tile.lab { background: var(--lab); } .tile.fed { background: var(--fed); }
+  .cols { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); gap: 20px; align-items: start; }
+  .side { display: grid; gap: 20px; }
+
+  /* agent message */
+  .agent { display: grid; gap: 16px; }
+  .agent-head { display: flex; align-items: center; gap: 12px; }
+  .orb { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: #fff; flex: none; background: radial-gradient(circle at 35% 30%, #b3a8ff, #6a55f0 55%, #4b36d4); box-shadow: 0 0 16px rgba(120,100,255,.35); }
+  .orb.verifier { background: radial-gradient(circle at 35% 30%, #7ee2b8, #1c9a6b 60%, #137552); box-shadow: 0 0 14px rgba(30,160,110,.3); }
+  .orb svg.i { width: 18px; height: 18px; }
+  .bubble { background: #f8f8fc; border: 1px solid var(--line); border-radius: 4px 16px 16px 16px; padding: 16px 18px; display: grid; gap: 14px; }
+  .risks { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .risk { display: flex; gap: 10px; align-items: flex-start; }
+  .risk .mark { width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: var(--warn-soft); color: var(--warn); flex: none; margin-top: 1px; }
+  .risk .mark svg.i { width: 13px; height: 13px; }
+  .risk.struck .mark { background: var(--bad-soft); color: var(--bad); }
+  .risk.struck .txt { text-decoration: line-through; color: var(--ink-3); }
+  .cites { display: inline-flex; gap: 4px; flex-wrap: wrap; margin-left: 4px; vertical-align: middle; }
+  .cite { font: 500 11px/1 var(--mono); border: 1px solid var(--line-2); background: #fff; border-radius: 6px; padding: 3px 6px; cursor: pointer; color: var(--ink-2); display: inline-flex; gap: 5px; align-items: center; }
+  .cite i { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+  .cite:hover, .cite:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+  .rec { background: var(--accent-soft); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+  .rec.withheld { background: #f1f1f5; }
+  .rec.withheld .body { text-decoration: line-through; color: var(--ink-3); }
+  .statline { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* facts */
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 16px; }
+  .group { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 2px; align-content: start; }
+  .group-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .group-head .tile { width: 28px; height: 28px; border-radius: 8px; } .group-head .tile svg.i { width: 15px; height: 15px; }
+  .fact { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 9px 8px; border-radius: 10px; transition: background .2s; }
+  .fact .lbl { font-weight: 500; }
+  .fact .sub { grid-column: 1 / -1; font-size: 12px; color: var(--ink-3); display: flex; gap: 8px; }
+  .fact .id { font-family: var(--mono); }
+  .fact.flash { background: var(--accent-soft); }
+  .fact.declined .lbl { color: var(--ink-3); }
+  .alert { border-radius: 14px; padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; background: var(--warn-soft); color: #6f4600; }
+  .alert b { color: #5a3a00; }
+
+  /* approval */
+  .gate { position: relative; }
+  .gate .text { filter: blur(6px); user-select: none; transition: filter .3s; padding: 12px 14px; background: #f8f8fc; border-radius: 12px; }
+  .gate.open .text { filter: none; user-select: text; }
+  .gate .lock { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 600; }
+  .gate .lock span { display: inline-flex; gap: 8px; align-items: center; background: #fff; border: 1px solid var(--line-2); border-radius: 999px; padding: 6px 14px; box-shadow: var(--shadow); }
+  .gate.open .lock { display: none; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 10px 18px; border: 1px solid #15151c; background: linear-gradient(180deg, #2f2f38, #15151c); color: #fff; font: inherit; font-weight: 500; cursor: pointer; width: 100%; margin-top: 14px; }
+  .btn:disabled { background: #efeff4; border-color: var(--line-2); color: var(--ink-3); cursor: not-allowed; }
+  .btn.done { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+  .risk-meter { height: 8px; border-radius: 999px; background: linear-gradient(90deg, #d9f1e6 0 15%, #fdf1dc 15% 40%, #fcebea 40% 100%); position: relative; margin: 14px 0 6px; }
+  .risk-meter i { position: absolute; top: -4px; width: 4px; height: 16px; border-radius: 2px; background: var(--ink); }
+  .scale { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--ink-3); }
+  textarea { width: 100%; border: 1px solid var(--line-2); border-radius: 12px; padding: 10px; font: 12px var(--mono); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" id="loader">
+    <h1>PreventNet review</h1>
+    <p class="muted" style="margin:6px 0 12px">No review found at <code>latest.json</code>. Paste a <code>PREVENTNET_RESULT</code> payload to view it.</p>
+    <textarea id="pasteArea" rows="7" aria-label="Review payload"></textarea>
+    <button class="btn" id="loadBtn" style="width:auto">Show review</button>
+  </div>
+
+  <div id="content" hidden style="display:grid;gap:20px">
+    <div class="card">
+      <div class="head">
+        <div class="who"><div class="avatar" id="avatar"></div>
+          <div><h1 id="patientId"></h1><p class="small muted" id="runInfo"></p></div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="statusChips"></div>
+      </div>
+      <div class="depts" id="depts"></div>
+    </div>
+
+    <div id="conflicts" style="display:grid;gap:12px"></div>
+
+    <div class="cols">
+      <div class="card agent">
+        <div class="agent-head"><div class="orb" id="orb"></div>
+          <div style="flex:1"><h2>Coordinator agent</h2><p class="small faint" id="agentModel"></p></div>
+          <span class="chip" id="confidence"></span></div>
+        <div class="bubble" id="agentBubble"></div>
+        <div class="agent-head"><div class="orb verifier" id="orb2"></div>
+          <div style="flex:1"><h2>Verifier</h2><p class="small faint">Code checks every claim against the facts</p></div></div>
+        <div class="bubble" id="verifierBubble"></div>
+      </div>
+      <div class="side">
+        <div class="card">
+          <div class="head"><h2>Clinician approval</h2><span class="chip" id="gateChip"></span></div>
+          <div class="gate" id="gate" style="margin-top:14px">
+            <div class="text" id="recommendationText"></div>
+            <div class="lock"><span id="lockText"></span></div>
+          </div>
+          <button class="btn" id="approveBtn"></button>
+        </div>
+        <div class="card" id="riskCard" hidden>
+          <div class="head"><h2>Diabetes risk</h2><span class="chip info" id="riskBand"></span></div>
+          <div class="risk-meter"><i id="riskMark"></i></div>
+          <div class="scale"><span>Low</span><span>Moderate</span><span>High</span></div>
+          <p class="small muted" style="margin-top:10px" id="riskText"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="head"><div><h2>What the coordinator saw</h2><p class="small muted" id="sawSub"></p></div>
+        <span class="chip ok" id="sawChip"></span></div>
+      <div class="facts" id="facts"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ICONS = {
+  sparkles: '<path d="M10 3.5 11.6 8l4.4 1.5-4.4 1.6L10 15.5l-1.6-4.4L4 9.5 8.4 8z"/><path d="M18 14l.8 2.2 2.2.8-2.2.8L18 20l-.8-2.2-2.2-.8 2.2-.8z"/>',
+  shield: '<path d="M12 3 4.5 6v6c0 4.8 3.3 7.8 7.5 9 4.2-1.2 7.5-4.2 7.5-9V6z"/><path d="m9 12 2 2 4-4"/>',
+  lock: '<rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>',
+  alert: '<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2h.01"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  gp: '<path d="M5.5 3.5v5a4.5 4.5 0 0 0 9 0v-5"/><path d="M10 13v3a4 4 0 0 0 8 0v-2"/><circle cx="18" cy="12" r="2"/>',
+  pharmacy: '<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/>',
+  lab: '<path d="M9 3h6"/><path d="M10 3v6.5L4.6 18.4A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.4-2.6L14 9.5V3"/><path d="M7.2 15h9.6"/>',
+  fed: '<circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4M12 11.5 6.8 17M12 11.5l5.2 5.5"/>',
+};
+const icon = (n, cls = "") => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
+const esc = s => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const humanize = s => { const t = String(s ?? "").replace(/[_-]+/g, " ").trim(); return t.charAt(0).toUpperCase() + t.slice(1); };
+const $ = id => document.getElementById(id);
+const EMBED = new URLSearchParams(location.search).has("embed");
+if (EMBED) document.body.classList.add("embed");
+
+const GROUPS = [["gp", "GP practice", "gp"], ["pharmacy", "Pharmacy", "pharmacy"], ["lab", "Lab", "lab"], ["federated-model", "Federated model", "fed"]];
+const COLORS = { gp: "var(--gp)", pharmacy: "var(--pharmacy)", lab: "var(--lab)", "federated-model": "var(--fed)" };
+const VERDICT = {
+  APPROVED_FOR_REVIEW: ["ok", "Ready for approval"],
+  ESCALATE_CONFLICT: ["warn", "Conflict found"],
+  BLOCKED_UNVERIFIED: ["bad", "Blocked: unverified"],
+};
+const ENGINE = { "supergrid": "Flower SuperGrid", "supergrid-ledger": "Endeavor on local facts", "local": "Offline rules" };
+const CONCERN = new Set(["mildly_reduced", "moderately_reduced", "severely_reduced", "declining", "prediabetic", "diabetic", "moderate", "high", "hypertension", "type2_diabetes"]);
+const REASSURING = new Set(["normal", "stable", "improving", "low", "none_relevant"]);
+
+let D, LB;
+const L = (kind, key) => (LB[kind] && LB[kind][key]) || humanize(key);
+
+function valueChip(v) {
+  if (v === true) return `<span class="chip info">Yes</span>`;
+  if (v === false) return `<span class="chip">No</span>`;
+  const cls = CONCERN.has(v) ? "warn" : REASSURING.has(v) ? "ok" : "";
+  return `<span class="chip ${cls}">${esc(L("values", v))}</span>`;
+}
+
+function sectionOf(line) {
+  const t = line.replace(/^[#\s]+/, "").replace(/\*/g, "").replace(/:\s*$/, "").trim().toUpperCase();
+  return ["RISKS", "RECOMMENDATION", "CONFIDENCE"].includes(t) ? t : null;
+}
+
+function withCites(text) {
+  const byId = Object.fromEntries((D.ledger || []).map(i => [i.id, i]));
+  const ids = [];
+  const clean = text.replace(/\[([^\]]+)\]/g, (m, inner) => {
+    const found = inner.split(/[,\s]+/).filter(x => /^L\d+$/.test(x));
+    if (!found.length) return m;
+    ids.push(...found); return "";
+  }).replace(/\s+([.,;])/g, "$1").trim();
+  const html = esc(clean).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  const chips = ids.map(id => {
+    const it = byId[id];
+    const title = it ? `${L("fields", it.field)}: ${it.value === true ? "Yes" : it.value === false ? "No" : L("values", it.value)}` : "No such fact";
+    return `<button type="button" class="cite" data-id="${esc(id)}" title="${esc(title)}"><i style="background:${it ? COLORS[it.source] || "var(--ink-3)" : "var(--bad)"}"></i>${esc(id)}</button>`;
+  }).join("");
+  return `${html}${chips ? `<span class="cites">${chips}</span>` : ""}`;
+}
+
+function parseSummary(md) {
+  const out = { RISKS: [], RECOMMENDATION: [], CONFIDENCE: [], other: [] };
+  let cur = "other";
+  for (const raw of (md || "").split("\n")) {
+    const line = raw.trim();
+    if (!line) continue;
+    const sec = sectionOf(line);
+    if (sec) { cur = sec; continue; }
+    const struck = /^~~.*~~$/.test(line);
+    const body = (struck ? line.slice(2, -2) : line).replace(/^[-*]\s+/, "");
+    out[cur].push({ text: body, struck });
+  }
+  return out;
+}
+
+function renderAgent() {
+  const s = parseSummary(D.risk_summary_md);
+  $("orb").innerHTML = icon("sparkles");
+  $("orb2").innerHTML = icon("shield");
+  $("agentModel").textContent = D.engine === "local" ? "Offline rules · no AI model"
+    : D.model_fallback === "timeout" ? `${D.model_used} · Flower Endeavor was too slow, so the fallback model answered` : D.model_used;
+  const conf = s.CONFIDENCE.map(x => x.text.replace(/\*/g, "")).join(" ");
+  const level = (conf.match(/high|medium|low/i) || [""])[0].toLowerCase();
+  $("confidence").className = "chip " + ({ high: "ok", medium: "warn", low: "" }[level] || "");
+  $("confidence").textContent = level ? `${humanize(level)} confidence` : "Confidence not stated";
+  $("confidence").title = conf;
+
+  const facts = (D.ledger || []).length, depts = new Set((D.ledger || []).map(i => i.source)).size;
+  const risks = s.RISKS.length ? `<ul class="risks">${s.RISKS.map(r => `<li class="risk ${r.struck ? "struck" : ""}">
+      <span class="mark">${icon(r.struck ? "x" : "alert")}</span>
+      <div><span class="txt">${withCites(r.text)}</span>${r.struck ? `<div class="small" style="color:var(--bad)">Removed by the verifier: no matching fact.</div>` : ""}</div></li>`).join("")}</ul>`
+    : `<p class="muted">${esc((s.other.map(o => o.text).join(" ")) || "No risks identified from the facts I received.")}</p>`;
+  const withheld = D.verdict !== "APPROVED_FOR_REVIEW";
+  const recText = s.RECOMMENDATION.map(r => r.text).join(" ");
+  $("agentBubble").innerHTML = `<p>I reviewed <b>${facts} facts</b> from ${depts} source${depts === 1 ? "" : "s"}${(D.refusals || []).length ? `; ${(D.refusals || []).length} question was declined` : ""}. Here is what I found.</p>
+    ${risks}
+    ${recText ? `<div class="rec ${withheld ? "withheld" : ""}"><span class="eyebrow">My recommendation${withheld ? " · withheld" : ""}</span><div class="body">${withCites(recText)}</div></div>` : ""}`;
+
+  const conflicts = (D.conflicts || []).length;
+  $("verifierBubble").innerHTML = `<p>${esc(D.verifier_note || "")}</p>
+    <div class="statline"><span class="chip ${VERDICT[D.verdict]?.[0] || ""}"><span class="dot"></span>${VERDICT[D.verdict]?.[1] || esc(D.verdict)}</span>
+    <span class="chip">${D.context_item_count ?? facts} facts checked</span>
+    <span class="chip ${D.struck_claims ? "bad" : ""}">${D.struck_claims || 0} claim${D.struck_claims === 1 ? "" : "s"} removed</span>
+    <span class="chip ${conflicts ? "warn" : ""}">${conflicts} conflict${conflicts === 1 ? "" : "s"}</span></div>`;
+}
+
+function renderFacts() {
+  const items = D.ledger || [], refusals = D.refusals || [];
+  $("sawSub").textContent = `${items.length} short facts and ${refusals.length} declined question${refusals.length === 1 ? "" : "s"}. No records, notes or names.`;
+  $("sawChip").innerHTML = `${icon("lock")}Raw data stayed local`;
+  $("facts").innerHTML = GROUPS.map(([role, name, ic]) => {
+    const own = items.filter(i => i.source === role), declined = refusals.filter(r => r.role === role);
+    if (!own.length && !declined.length) return "";
+    const rows = own.map(i => `<div class="fact" id="fact-${esc(i.id)}"><span class="lbl">${esc(L("fields", i.field))}</span>${valueChip(i.value)}
+        <span class="sub"><span class="id">${esc(i.id)}</span><span>${esc(L("purposes", i.purpose))}</span></span></div>`).join("");
+    const dec = declined.map(r => `<div class="fact declined"><span class="lbl">${esc(L("questions", r.question_id))}</span><span class="chip bad">${icon("lock")}Declined</span>
+        <span class="sub"><span>${esc(L("reasons", r.reason))}</span></span></div>`).join("");
+    return `<div class="group"><div class="group-head"><div class="tile ${ic}">${icon(ic)}</div><h3>${name}</h3>
+      <span class="small faint" style="margin-left:auto">${own.length} fact${own.length === 1 ? "" : "s"}</span></div>${rows}${dec}</div>`;
+  }).join("");
+}
+
+function renderHeader() {
+  $("avatar").textContent = D.patient_id.replace(/^P0*/, "P");
+  $("patientId").textContent = "Patient " + D.patient_id;
+  const when = D.reviewed_at ? new Date(D.reviewed_at).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "";
+  $("runInfo").textContent = [when, ENGINE[D.engine] || "Flower SuperGrid", D.run_id ? `run ${D.run_id}` : "",
+    D.replayed ? `replayed (recorded ${new Date(D.recorded_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })})` : "",
+    D.duration_s ? `took ${Math.round(D.duration_s)}s` : "", D.fast ? `fast mode · ${D.model_calls} model call${D.model_calls === 1 ? "" : "s"}` : ""].filter(Boolean).join(" · ");
+  const [cls, text] = VERDICT[D.verdict] || ["", D.verdict];
+  $("statusChips").innerHTML = `<span class="chip big ${cls}"><span class="dot"></span>${esc(text)}</span>` +
+    (D.approval ? `<span class="chip big ok">${icon("check")}Approved</span>` : "");
+  const hacked = new Set(D.sabotaged_roles || (D.sabotage ? ["pharmacy"] : []));
+  $("depts").innerHTML = GROUPS.slice(0, 3).map(([role, name, ic]) => {
+    const n = D.local_views?.[role]?.records_scanned;
+    return `<div class="dept"><div class="tile ${ic}">${icon(ic)}</div><div><b>${name}</b>
+      <div class="small muted">${n ?? "?"} record${n === 1 ? "" : "s"} checked · stayed local</div>
+      ${hacked.has(role) ? `<span class="chip bad" style="margin-top:4px">${icon("alert")}Compromised (demo)</span>` : ""}</div></div>`;
+  }).join("");
+  $("conflicts").innerHTML = (D.conflicts || []).map(c => `<div class="alert">${icon("alert")}<div><b>The departments disagree.</b> ${esc(c.description)}
+      <span class="cites">${(c.ledger_ids || []).map(id => `<button type="button" class="cite" data-id="${esc(id)}">${esc(id)}</button>`).join("")}</span></div></div>`).join("");
+}
+
+function renderRisk() {
+  const r = D.fl_risk, fl = D.fl;
+  $("riskCard").hidden = !r;
+  if (!r) return;
+  $("riskBand").textContent = L("values", r.band);
+  $("riskMark").style.left = `calc(${Math.min(98, r.probability * 100)}% - 2px)`;
+  $("riskText").textContent = `${Math.round(r.probability * 100)}% estimated chance of developing diabetes, from a model the departments trained together` +
+    (fl ? ` (test AUC ${fl.test_auc.toFixed(2)}, ${fl.source === "supergrid" ? "trained inside the SuperGrid run" : "trained across the local departments"}).` : ".");
+}
+
+function renderGate() {
+  const gate = $("gate"), btn = $("approveBtn");
+  $("recommendationText").textContent = (D.recommendation || "No recommendation.").replace(/\s*\[(?:L\d+[,\s]*)+\]/g, "").trim();
+  const release = (who, at) => {
+    gate.classList.add("open");
+    btn.disabled = true; btn.className = "btn done";
+    btn.innerHTML = `${icon("check")}Approved by ${esc(who)} · ${esc(at)}`;
+    $("gateChip").className = "chip ok"; $("gateChip").textContent = "Released";
+  };
+  if (D.verdict === "ESCALATE_CONFLICT") {
+    $("lockText").innerHTML = `${icon("lock")}Held back`; btn.disabled = true; btn.textContent = "Resolve the data conflict first";
+    $("gateChip").className = "chip warn"; $("gateChip").textContent = "Blocked";
+  } else if (D.verdict !== "APPROVED_FOR_REVIEW") {
+    $("lockText").innerHTML = `${icon("lock")}Held back`; btn.disabled = true; btn.textContent = "Blocked: claims could not be verified";
+    $("gateChip").className = "chip bad"; $("gateChip").textContent = "Blocked";
+  } else if (D.approval) {
+    release(D.approval.clinician, new Date(D.approval.approved_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+  } else {
+    $("lockText").innerHTML = `${icon("lock")}Awaiting clinician approval`;
+    $("gateChip").className = "chip warn"; $("gateChip").textContent = "Needs you";
+    btn.innerHTML = `${icon("check")}Approve &amp; send to GP`;
+    btn.onclick = async () => {
+      let r;
+      try {
+        r = await fetch("api/approve", { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ patient_id: D.patient_id, clinician: "clinician" }) });
+      } catch (e) { r = { status: 0 }; }
+      if (r.ok) {
+        const a = await r.json();
+        release(a.clinician, new Date(a.approved_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+        window.parent.postMessage({ type: "approved" }, "*");
+      } else if ([0, 404, 405, 501].includes(r.status)) {
+        release("clinician", new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));  // static viewer: nothing to record it
+      } else {
+        alert("Approval refused: " + ((await r.json()).error || r.status));
+      }
+    };
+  }
+}
+
+document.addEventListener("click", e => {
+  const c = e.target.closest(".cite");
+  if (!c) return;
+  const row = $("fact-" + c.dataset.id);
+  if (!row) return;
+  row.scrollIntoView({ behavior: "smooth", block: "center" });
+  row.classList.add("flash");
+  setTimeout(() => row.classList.remove("flash"), 1600);
+});
+
+function render(data) {
+  D = data; LB = data.labels || {};
+  $("loader").hidden = true;
+  $("content").hidden = false;
+  renderHeader(); renderAgent(); renderGate(); renderRisk(); renderFacts();
+  postHeight();
+}
+
+function postHeight() { if (EMBED) window.parent.postMessage({ type: "height", h: document.documentElement.scrollHeight }, "*"); }
+new ResizeObserver(postHeight).observe(document.body);
+
+fetch("latest.json", { cache: "no-store" }).then(r => { if (!r.ok) throw new Error("not found"); return r.json(); })
+  .then(render)
+  .catch(() => {
+    $("loadBtn").addEventListener("click", () => {
+      try { render(JSON.parse($("pasteArea").value)); } catch (e) { alert("That isn't a valid review payload: " + e.message); }
+    });
+    postHeight();
+  });
+</script>
+</body>
+</html>
