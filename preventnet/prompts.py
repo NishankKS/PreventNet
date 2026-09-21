@@ -33,6 +33,6 @@ CONCISE_SUFFIX = (
 
 VERIFIER_EXPLAIN_INSTRUCTIONS = (
     "Write a 2-sentence plain-language explanation of this verdict for a "
-    "clinician audience. Do not change or second-guess the verdict — only "
+    "clinician audience. Do not change or second-guess the verdict, only "
     "explain what it means and why."
 )

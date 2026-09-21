@@ -1,4 +1,4 @@
-"""Offline check for facets.py — model_call is stubbed, no network."""
+"""Offline check for facets.py: model_call is stubbed, no network."""
 
 import json
 
@@ -45,7 +45,7 @@ def test_marketing_question_refused_before_model_even_if_model_would_answer_null
 
     def call(instructions, input_text):
         seen_payloads.append(input_text)
-        # A model with no marketing data answers null — refusal must still be recorded.
+        # A model with no marketing data answers null: the refusal must still be recorded.
         return json.dumps({"answers": {"q_gp_conditions": "hypertension", "q_gp_marketing_segment": None}})
 
     facet_answer(

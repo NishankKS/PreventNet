@@ -2,7 +2,7 @@
 
 Holds its own raw records and its own Pima columns. Exposes:
   GET  /               this site's own overview page (raw data shown LOCALLY only)
-  GET  /api/overview   data for that page — never called by the coordinator
+  GET  /api/overview   data for that page, never called by the coordinator
   POST /ask            answer purpose-tagged catalog questions -> wire items/refusals only
   POST /fl/*           its half of vertical federated learning (see vfl.py)
   POST /admin/sabotage demo switch (pharmacy only)
@@ -25,7 +25,7 @@ from pathlib import Path
 from preventnet.facets import SABOTAGE_QUESTION_IDS, SABOTAGE_ROLE, disclose, split_by_policy
 from preventnet import rules
 from preventnet.policy import QUESTION_CATALOG, ROLE_LABELS, display_labels
-from preventnet.vfl import COLUMN_LABELS, SiteModel
+from preventnet.vfl import SiteModel
 
 from .net import ApiError, JsonHandler, post_json
 
@@ -166,10 +166,6 @@ class Site:
                 "cohort": {"columns": self.cohort_columns, "preview": self.cohort_preview,
                            "counts": m.summary()["splits"],
                     "holds_labels": m.is_label_holder, "summary": m.summary()},
-                "model": {"rounds": m.rounds, "bias": m.b if m.is_label_holder else None,
-                          "weights": [{"feature": f, "label": COLUMN_LABELS.get(f, f), "weight": round(float(w), 4)}
-                                      for f, w in zip(m.feature_names, m.w)],
-                          "last_train_loss": m.last_train_loss},
                 "audit": list(reversed(self.audit)),
             }
 

@@ -2,7 +2,7 @@
 
 Neither function ever touches raw patient records. plan_questions only sees
 the closed question catalog; reason_over_ledger only sees wire-format ledger
-items and refusals — never the facet agents' raw model conversations.
+items and refusals, never the facet agents' raw model conversations.
 """
 
 from __future__ import annotations

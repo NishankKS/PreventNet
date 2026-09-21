@@ -335,11 +335,13 @@ class Coordinator:
                 status = "conflict" if r["verdict"] == "ESCALATE_CONFLICT" else "blocked"
             if r:
                 counts["reviewed"] += 1
-            key = {"approved": "approved", "declined": "declined", "awaiting": "awaiting",
-                   "conflict": "conflicts", "blocked": "conflicts"}.get(status)
+            key = {"awaiting": "awaiting", "conflict": "conflicts", "blocked": "conflicts"}.get(status)
             if key:
                 counts[key] += 1
             rows.append({"patient_id": pid, "status": status, "reviewed_at": r and r["reviewed_at"]})
+        # Approvals and declines count every decision made today, even if a patient was reviewed again.
+        counts["approved"] = sum(d["action"] == "approved" for d in self.decisions)
+        counts["declined"] = sum(d["action"] == "declined" for d in self.decisions)
         return {"patients": rows, "counts": counts,
                 "on_screen": self.latest["patient_id"] if self.latest else None}
 

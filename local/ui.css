@@ -1,4 +1,4 @@
-/* PreventNet UI — shared by the coordinator dashboard and the department sites. */
+/* PreventNet UI: shared by the coordinator dashboard and the department sites. */
 :root {
   --canvas: #f2f2f6; --card: #ffffff; --line: #ebebf1; --line-2: #dfdfe8;
   --ink: #15151c; --ink-2: #5d5d6c; --ink-3: #9898a7;

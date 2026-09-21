@@ -353,7 +353,7 @@ def main(agent: AgentSession, context: Context) -> None:
         agent.events.emit({"type": "preventnet.coordinator_output", "preventnet": "coordinator_output",
                            "model": caller.model, "text": risk_summary_md})
 
-        # Phase 5: Verifier — deterministic checks decide the verdict; one
+        # Phase 5: Verifier: deterministic checks decide the verdict; one
         # model call writes prose only (model call #6).
         agent.events.emit(_phase_event("verifier"))
         # In fast mode the verdict's plain-language note is written by code, not a model.

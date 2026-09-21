@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PreventNet Department</title>
+<title>PreventNet Source</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="ui.css">
@@ -32,28 +32,27 @@
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-tile" id="brandTile"></div>
-      <div><div class="brand-name" id="brandName">Department</div><div class="brand-sub">Local deployment</div></div>
+      <div><div class="brand-name" id="brandName">Source</div><div class="brand-sub">PreventNet Data Source</div></div>
     </div>
-    <div class="context"><span data-icon="lock"></span><div><div style="font-weight:500">Private server</div><div class="small faint">Raw data never leaves</div></div></div>
-    <nav class="nav" aria-label="Department">
-      <div class="eyebrow">Department</div>
+    <div class="context"><span data-icon="lock"></span><div><div style="font-weight:500">Private Server</div><div class="small faint">Raw Data Never Leaves</div></div></div>
+    <nav class="nav" aria-label="Source">
+      <div class="eyebrow">Source</div>
       <a href="#overview" data-view="overview"><span data-icon="grid"></span>Overview</a>
-      <a href="#records" data-view="records"><span data-icon="file"></span>Patient records<span class="count" id="navRecords"></span></a>
-      <a href="#shared" data-view="shared"><span data-icon="shield"></span>Shared &amp; declined<span class="count" id="navShared"></span></a>
-      <a href="#model" data-view="model"><span data-icon="chart"></span>Model share</a>
-      <a href="#cohort" data-view="cohort"><span data-icon="database"></span>Cohort data</a>
+      <a href="#records" data-view="records"><span data-icon="file"></span>Patient Records<span class="count" id="navRecords"></span></a>
+      <a href="#shared" data-view="shared"><span data-icon="shield"></span>Shared &amp; Declined<span class="count" id="navShared"></span></a>
+      <a href="#cohort" data-view="cohort"><span data-icon="database"></span>Cohort Data</a>
     </nav>
     <div class="grow"></div>
     <div class="usercard">
-      <div class="who"><div class="avatar" id="deptAvatar"></div><div><div style="font-weight:600">Data steward</div><div class="small faint">Answers only short questions</div></div></div>
-      <p class="small muted">The coordinator can ask catalog questions and exchange masked training scores. It never loads this page.</p>
+      <div class="who"><div class="avatar" id="deptAvatar"></div><div><div style="font-weight:600">Data Steward</div><div class="small faint">Answers Only Short Questions</div></div></div>
+      <p class="small muted">The coordinator can only ask short, approved questions. It never sees this page.</p>
     </div>
   </aside>
 
   <div class="main">
     <header class="topbar">
-      <div class="title"><h1 id="title">Department</h1><p id="subline">Everything on this page stays on this server.</p></div>
-      <span class="pill ok" id="statusPill"><span class="dot"></span><span id="statusText">Private · local only</span></span>
+      <div class="title"><h1 id="title">Source</h1><p id="subline">Everything on this page stays on this server.</p></div>
+      <span class="pill ok" id="statusPill"><span class="dot"></span><span id="statusText">Private · Local Only</span></span>
     </header>
 
     <div class="content">
@@ -67,57 +66,45 @@
             <div class="chips" id="heroChips"></div>
           </div>
           <div class="glass-row">
-            <div class="glass"><div class="k"><span data-icon="shield"></span>Facts shared</div><div class="v" id="gShared">0</div><div class="s">short answers only</div></div>
-            <div class="glass"><div class="k"><span data-icon="lock"></span>Declined</div><div class="v" id="gDeclined">0</div><div class="s">out-of-purpose questions</div></div>
-            <div class="glass"><div class="k"><span data-icon="chart"></span>Training rounds</div><div class="v" id="gRounds">0</div><div class="s">in the shared model</div></div>
+            <div class="glass"><div class="k"><span data-icon="shield"></span>Facts Shared</div><div class="v" id="gShared">0</div><div class="s">short answers only</div></div>
+            <div class="glass"><div class="k"><span data-icon="lock"></span>Declined</div><div class="v" id="gDeclined">0</div><div class="s">outside the purpose</div></div>
+            <div class="glass"><div class="k"><span data-icon="users"></span>Patients</div><div class="v" id="gPatients">0</div><div class="s">with records here</div></div>
           </div>
         </div>
 
         <div class="card demo" id="demoCard" hidden style="margin-top:20px">
-          <div class="card-head" style="margin-bottom:10px"><div><h2>Demo: compromise this agent</h2>
-            <p>When on, this pharmacy's answers about painkillers and interaction alerts are secretly flipped to “No”. The coordinator's verifier should catch it.</p></div></div>
-          <label class="switch"><input type="checkbox" id="sabotage"><span id="sabotageLabel">Compromise the pharmacy agent</span></label>
+          <div class="card-head" style="margin-bottom:10px"><div><h2>Demo: Compromise This Source</h2>
+            <p>When on, the answers about painkillers and interaction alerts are secretly flipped to “No”. The coordinator's checks should catch it.</p></div></div>
+          <label class="switch"><input type="checkbox" id="sabotage"><span id="sabotageLabel">Compromise Prescription Logs</span></label>
         </div>
 
         <div class="grid-2" style="margin-top:20px">
-          <div class="card"><div class="card-head"><div><h2>Recent activity</h2><p>What this department told the coordinator</p></div><a class="btn" href="#shared">View all</a></div>
+          <div class="card"><div class="card-head"><div><h2>Recent Activity</h2><p>What this source told the coordinator</p></div><a class="btn" href="#shared">View All</a></div>
             <div class="feed" id="recentFeed"></div></div>
-          <div class="card"><div class="card-head"><div><h2>Model share</h2><p>This department's part of the diabetes model</p></div><a class="btn" href="#model">Details</a></div>
-            <div id="modelMini"></div></div>
+          <div class="card"><div class="card-head"><div><h2>Records At A Glance</h2><p>What this source holds</p></div><a class="btn" href="#records">View Records</a></div>
+            <div class="rows" id="kindRows"></div></div>
         </div>
       </section>
 
       <section class="view" id="view-records" hidden>
         <div class="card">
-          <div class="card-head"><div><h2>Patient records</h2><p>Raw records. Only visible here.</p></div><div class="seg" id="patientSeg"></div></div>
+          <div class="card-head"><div><h2>Patient Records</h2><p>Raw records. Only visible here.</p></div><div class="seg" id="patientSeg"></div></div>
           <div class="feed" id="recordFeed"></div>
         </div>
       </section>
 
       <section class="view" id="view-shared" hidden>
         <div class="card">
-          <div class="card-head"><div><h2>Shared &amp; declined</h2><p>Every answer this department sent, and every question it refused</p></div></div>
+          <div class="card-head"><div><h2>Shared &amp; Declined</h2><p>Every answer this source sent, and every question it refused</p></div></div>
           <div class="feed" id="sharedFeed"></div>
-        </div>
-      </section>
-
-      <section class="view" id="view-model" hidden>
-        <div class="grid-2" style="align-items:start">
-          <div class="card"><div class="card-head"><div><h2>Model share</h2><p id="modelSub"></p></div></div><div id="modelFull"></div></div>
-          <div class="card"><div class="card-head"><div><h2>How to read this</h2></div></div>
-            <div class="rows">
-              <div class="r"><span>Bars to the right push diabetes risk <b>up</b>, bars to the left push it <b>down</b>.</span></div>
-              <div class="r"><span>These weights are learned together with the other departments, but they are stored only on this server.</span></div>
-              <div class="r"><span>Measures are standardised first, so bar lengths can be compared with each other.</span></div>
-            </div></div>
         </div>
       </section>
 
       <section class="view" id="view-cohort" hidden>
         <div class="card">
-          <div class="card-head"><div><h2>Cohort data</h2><p id="cohortSub"></p></div></div>
+          <div class="card-head"><div><h2>Cohort Data</h2><p id="cohortSub"></p></div></div>
           <div class="grid-3" id="cohortCols"></div>
-          <details style="margin-top:16px"><summary>Preview first rows</summary><div class="tbl"><table id="cohortTable"></table></div></details>
+          <details style="margin-top:16px"><summary>Preview First Rows</summary><div class="tbl"><table id="cohortTable"></table></div></details>
         </div>
       </section>
     </div>
@@ -133,6 +120,10 @@ const KIND = {
   diagnosis: ["gp", "Diagnosis"], family_history: ["users", "Family history"], visit_note: ["file", "Visit note"],
   referral: ["arrow", "Referral"], dispense: ["pharmacy", "Dispensed"], interaction_flag: ["alert", "Interaction alert"],
   lab_result: ["lab", "Lab result"],
+};
+const KIND_NAME = {
+  diagnosis: "Diagnoses", family_history: "Family History", visit_note: "Visit Notes", referral: "Referrals",
+  dispense: "Dispensed Medicines", interaction_flag: "Interaction Alerts", lab_result: "Lab Results",
 };
 const WORDS = {
   metformin: "Metformin", ibuprofen: "Ibuprofen", vitamin_d: "Vitamin D", cetirizine: "Cetirizine", asthma: "Asthma",
@@ -184,17 +175,8 @@ function auditItem(a) {
   return `<div class="item"><div class="tile ${on ? "bad" : ""}">${icon("alert")}</div><div class="text"><b>Demo:</b> agent compromise turned ${on ? "on" : "off"}
     <div class="meta">${icon("clock")}${time(a.at)}</div></div></div>`;
 }
-const emptyFeed = text => `<div class="empty">${icon("shield")}<b>Nothing shared from this server yet</b><span>${text}</span></div>`;
-const EMPTY_HINT = "Answers appear here when the coordinator reviews through the local departments (Offline, or Endeavor on local facts). A full SuperGrid run uses the app's own bundled copy of this department.";
-
-function weights(list) {
-  const max = Math.max(0.01, ...list.map(w => Math.abs(w.weight)));
-  return list.map(w => {
-    const pct = Math.abs(w.weight) / max * 50;
-    const style = w.weight >= 0 ? `left:50%;width:${pct}%;background:var(--accent)` : `right:50%;width:${pct}%;background:var(--pharmacy)`;
-    return `<div class="weight"><span>${esc(w.label)}</span><div class="wbar"><i style="${style}"></i></div><span class="num small" style="text-align:right">${w.weight >= 0 ? "+" : ""}${w.weight.toFixed(2)}</span></div>`;
-  }).join("");
-}
+const emptyFeed = text => `<div class="empty">${icon("shield")}<b>Nothing Shared Yet</b><span>${text}</span></div>`;
+const EMPTY_HINT = "Answers appear here when the coordinator reviews a patient.";
 
 function render() {
   const role = D.role, name = D.role_label;
@@ -211,35 +193,34 @@ function render() {
   $("navRecords").textContent = D.records.length;
   $("navShared").textContent = shared.length + declined.length;
   $("statusPill").className = "pill " + (D.sabotage ? "bad" : "ok");
-  $("statusText").textContent = D.sabotage ? "Compromised (demo)" : "Private · local only";
-  $("subline").innerHTML = `${D.records.length} patient records and ${D.cohort.summary.rows} cohort rows live here. <b>None of them leave this server.</b>`;
+  $("statusText").textContent = D.sabotage ? "Compromised (Demo)" : "Private · Local Only";
+  $("subline").innerHTML = `${D.records.length} patient records live here. <b>None of them leave this server.</b>`;
 
   const hero = $("hero");
   hero.className = `hero dept-${role}` + (D.sabotage ? " compromised" : "");
   $("heroTag").className = "tag" + (D.sabotage ? " wait" : "");
-  $("heroTagText").textContent = `${name.toUpperCase()} AGENT · ${D.sabotage ? "COMPROMISED" : "LOCAL"}`;
-  $("heroHeadline").textContent = D.sabotage ? "This agent is compromised for the demo: its safety answers are being flipped"
+  $("heroTagText").textContent = `${name.toUpperCase()} · ${D.sabotage ? "COMPROMISED" : "PRIVATE SOURCE"}`;
+  $("heroHeadline").textContent = D.sabotage ? "This source is compromised for the demo: its safety answers are being flipped"
     : shared.length ? `Shared ${shared.length} short answer${shared.length === 1 ? "" : "s"} and declined ${declined.length}. No record left this server.`
     : "Waiting for questions from the coordinator";
   $("heroChips").innerHTML = [`${patients.length} patients`, `${D.records.length} records`,
-    D.cohort.holds_labels ? "Holds the diabetes outcome" : `${D.cohort.summary.columns.length} model measure${D.cohort.summary.columns.length === 1 ? "" : "s"}`]
+    "Records Stay Here"]
     .map(c => `<span>${esc(c)}</span>`).join("");
   $("gShared").textContent = shared.length;
   $("gDeclined").textContent = declined.length;
-  $("gRounds").textContent = D.model.rounds;
+  $("gPatients").textContent = patients.length;
 
   $("demoCard").hidden = role !== "pharmacy";
   $("sabotage").checked = D.sabotage;
-  $("sabotageLabel").textContent = D.sabotage ? "Agent is compromised" : "Compromise the pharmacy agent";
+  $("sabotageLabel").textContent = D.sabotage ? "Compromised (Demo)" : "Compromise Prescription Logs";
 
   $("recentFeed").innerHTML = D.audit.length ? D.audit.slice(0, 5).map(auditItem).join("") : emptyFeed(EMPTY_HINT);
   $("sharedFeed").innerHTML = D.audit.length ? D.audit.map(auditItem).join("") : emptyFeed(EMPTY_HINT);
 
-  const m = D.model;
-  const modelBody = m.rounds ? weights(m.weights) : `<div class="empty">${icon("chart")}<b>Not trained yet</b><span>Train the model from the coordinator dashboard.</span></div>`;
-  $("modelMini").innerHTML = modelBody;
-  $("modelFull").innerHTML = modelBody + (m.bias != null && m.rounds ? `<div class="rows"><div class="r"><span>Baseline (bias)</span><span class="num">${m.bias.toFixed(2)}</span></div></div>` : "");
-  $("modelSub").textContent = m.rounds ? `${m.rounds} training rounds${m.last_train_loss != null ? ` · training loss ${m.last_train_loss.toFixed(3)}` : ""}${D.cohort.holds_labels ? " · this department holds the outcome" : ""}` : "Not trained yet";
+  const kinds = {};
+  D.records.forEach(r => { kinds[r.kind] = (kinds[r.kind] || 0) + 1; });
+  $("kindRows").innerHTML = Object.entries(kinds).map(([k, n]) =>
+    `<div class="r"><span style="display:flex;gap:10px;align-items:center"><span class="tile">${icon((KIND[k] || ["file"])[0])}</span>${esc(KIND_NAME[k] || humanize(k))}</span><b class="num">${n}</b></div>`).join("");
 
   if (!patient || !patients.includes(patient)) patient = patients[0];
   $("patientSeg").innerHTML = patients.map(p => `<button type="button" data-p="${esc(p)}" class="${p === patient ? "on" : ""}">${esc(p)}</button>`).join("");

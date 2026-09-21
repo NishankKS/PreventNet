@@ -1,7 +1,8 @@
 .venv/
-*.fab
 __pycache__/
-!README.md
+.pytest_cache/
+*.fab
+*.log
 
-local/.supergrid_cache.json
-run_*.log
+# generated at runtime by the local deployments / scripts
+viewer/latest.json

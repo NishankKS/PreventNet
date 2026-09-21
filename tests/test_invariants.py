@@ -1,4 +1,4 @@
-"""Offline invariant tests — no model calls."""
+"""Offline invariant tests: no model calls."""
 
 import json
 from pathlib import Path
@@ -56,7 +56,7 @@ def test_ledger_never_carries_raw_record_fields():
     events = []
     ledger = Ledger(emit=events.append)
 
-    # Simulate facets.py building wire items from model answers — never from
+    # Simulate facets.py building wire items from model answers, never from
     # the raw jsonl records directly.
     stubbed_answers = [
         {"field": "egfr_band", "value": "moderately_reduced", "purpose": "renal-risk-review", "source": "lab", "ts": "2026-06-01"},

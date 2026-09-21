@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "preventnet"
-version = "0.1.0"
+version = "0.1.1"
 description = "Federated preventive-risk review: agents share judgements, never records."
 license = { file = "LICENSE" }
 requires-python = ">=3.11,<3.14"
@@ -20,7 +20,7 @@ packages = ["preventnet"]
 publisher = "nishankks"
 fab-format-version = 1
 flwr-version-target = "1.37.0"
-fab-include = ["preventnet/**/*.py", "preventnet/data/*/*.jsonl", "LICENSE"]
+fab-include = ["preventnet/**/*.py", "preventnet/data/*/*.jsonl", "LICENSE", "README.md"]
 
 [tool.flwr.app.config.agent]
 input = "Run a preventive review for patient P001."

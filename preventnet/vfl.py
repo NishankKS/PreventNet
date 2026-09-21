@@ -144,7 +144,7 @@ class SiteModel:
         return self.split == split
 
     def alignment_digest(self) -> str:
-        """Hash of this site's train+test entity ids — lets the coordinator check alignment blind."""
+        """Hash of this site's train+test entity ids; lets the coordinator check alignment blind."""
         ids = self.ids[self.split != "review"]
         return hashlib.sha256("|".join(ids).encode()).hexdigest()
 

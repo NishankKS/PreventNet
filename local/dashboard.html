@@ -53,7 +53,8 @@
   .step.done .tile { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
   .step.done .tile svg.i { animation: pop .35s ease-out; }
   .step.active .text b { color: var(--accent); }
-  .step .meta { max-height: 0; overflow: hidden; transition: max-height .35s; }
+  .step .meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-3); max-height: 0; overflow: hidden; transition: max-height .35s; }
+  .step .meta svg.i { width: 12px; height: 12px; color: var(--accent-2); }
   .step .meta.show { max-height: 30px; }
   @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(91,78,230,.35); } 100% { box-shadow: 0 0 0 10px rgba(91,78,230,0); } }
   @keyframes pop { 0% { transform: scale(.4); opacity: 0; } 70% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }
@@ -149,7 +150,7 @@
                   <div><b>Flower SuperGrid</b><div class="small muted"><span class="live-dot"></span>Secure Federated Run</div></div></div>
               </div>
               <div style="display:grid;gap:10px">
-                <label class="switch" id="fastRow"><input type="checkbox" id="fast" checked><span><b>Fast Demo Mode</b> <span class="small muted">uses prepared responses</span></span></label>
+                <label class="switch" id="fastRow"><input type="checkbox" id="fast" checked><span><b>Fast Mode</b></span></label>
                 <label class="switch"><input type="checkbox" id="sabotage"><span>Simulate Compromised Prescription Logs</span></label>
               </div>
               <button class="btn btn-dark" id="startBtn" style="justify-self:start"><span data-icon="sparkles"></span><span id="startText">Start Review</span></button>
@@ -438,7 +439,7 @@ function renderSteps() {
       el.querySelector(".tile").innerHTML = icon(state === "done" ? "check" : state === "active" ? "loader" : ic, state === "active" ? "spin" : "");
     }
     let meta = job.details?.[st] || "";
-    if (st === "done" && job.status === "done" && l) meta = (VERDICT[l.verdict] || {}).text || "";
+    if (st === "done" && job.status === "done" && l && l.verdict !== "APPROVED_FOR_REVIEW") meta = (VERDICT[l.verdict] || {}).text || "";
     const m = el.querySelector(".meta");
     if (meta && m.dataset.text !== meta) { m.innerHTML = `${icon("sparkles")}${esc(meta)}`; m.dataset.text = meta; m.classList.add("show"); }
   });
@@ -451,11 +452,11 @@ function renderSteps() {
 }
 
 function friendlyError(msg) {
-  if (/Stopped waiting|timed out/i.test(msg)) return "Flower SuperGrid took too long to answer. Try again with Fast Demo Mode on.";
+  if (/Stopped waiting|timed out/i.test(msg)) return "Flower SuperGrid took too long to answer. Try again with Fast Mode on.";
   if (/unreach|connect|login|auth|token|401|403/i.test(msg)) return "Couldn't reach Flower SuperGrid. Check the connection and your Flower login, then try again.";
   if (/already running/.test(msg)) return "A review is already running. Wait for it to finish.";
   if (/site failed/.test(msg)) return "One of the data sources didn't respond. Check that all three are running.";
-  return "Something went wrong while running the review. Try again with Fast Demo Mode on.";
+  return "Something went wrong while running the review. Try again with Fast Mode on.";
 }
 function showError(msg, log = []) {
   $("reviewError").hidden = false;

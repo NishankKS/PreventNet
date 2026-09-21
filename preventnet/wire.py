@@ -15,7 +15,7 @@ ALLOWED_WIRE_FIELDS = {"field", "value", "band", "purpose", "source", "ts", "con
 ALLOWED_VALUE_TYPES = (bool, str)
 MAX_STRING_LEN = 40
 # Defense in depth: these must never appear even though they're not in the
-# allowlist above — a bug that widened ALLOWED_WIRE_FIELDS could not resurrect them.
+# allowlist above; a bug that widened ALLOWED_WIRE_FIELDS could not resurrect them.
 BLOCKED_KEYS = {"record_id", "text", "note", "name", "dob"}
 
 

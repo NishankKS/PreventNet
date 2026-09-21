@@ -1,4 +1,4 @@
-"""Offline checks for coordinator.py — model_call is stubbed, no network."""
+"""Offline checks for coordinator.py: model_call is stubbed, no network."""
 
 import json
 

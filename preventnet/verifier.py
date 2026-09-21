@@ -65,7 +65,7 @@ def _index_by_role_field(ledger: Ledger) -> dict[tuple[str, str], WireItem]:
 
 
 def check_contradictions(ledger: Ledger) -> list[dict]:
-    """Hardcoded contradiction rules — this is what catches a sabotaged agent."""
+    """Hardcoded contradiction rules: this is what catches a sabotaged agent."""
     idx = _index_by_role_field(ledger)
     conflicts: list[dict] = []
 
