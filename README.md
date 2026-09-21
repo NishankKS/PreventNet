@@ -1,15 +1,3 @@
----
-tags: [agentapp, healthcare, privacy]
-dataset: []
-framework: []
----
-
-<!--
-  PreventNet, powered by Flower: federated preventive-risk review
-  Author: Nishank K S (@NishankKS) · github.com/NishankKS/PreventNet
-  Original work. Please keep attribution if you fork or reuse this.
--->
-
 # 🩺 PreventNet
 
 > Powered by Flower. Agents share judgements, never records.
